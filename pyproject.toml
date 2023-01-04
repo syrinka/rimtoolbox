@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "rimtoolbox"
+version = "0.1.0"
+description = ""
+authors = ["syrinka <syrinka@foxmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+xmltodict = "^0.13.0"
+pydantic = "^1.10.4"
+loguru = "^0.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
