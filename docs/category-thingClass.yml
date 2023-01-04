@@ -1,0 +1,64 @@
+Item:
+- ActiveDropPod
+- Apparel
+- Medicine
+- MinifiedThing
+- MinifiedTree
+- SmokepopBelt
+- Thing
+- ThingWithComps
+- UnfinishedThing
+Projectile:
+- Bullet',
+- Projectile_DoomsdayRocket
+- Projectile_Explosive
+- Projectile_Liquid
+- Spark
+Building:
+- Building
+- Building_AncientCryptosleepCasket
+- Building_AncientCryptosleepPod
+- Building_Art
+- Building_Battery
+- Building_Bed
+- Building_BurningPowerCell
+- Building_CommsConsole
+- Building_Cooler
+- Building_CryptosleepCasket
+- Building_Door
+- Building_FermentingBarrel
+- Building_Grave
+- Building_Heater
+- Building_MarriageSpot
+- Building_NutrientPasteDispenser
+- Building_OrbitalTradeBeacon
+- Building_PlantGrower
+- Building_PodLauncher
+- Building_PowerSwitch
+- Building_ResearchBench
+- Building_Sarcophagus
+- Building_ShipComputerCore
+- Building_ShipReactor
+- Building_SteamGeyser
+- Building_Storage
+- Building_SunLamp
+- Building_TrapDamager
+- Building_TrapExplosive
+- Building_TurretFoam
+- Building_TurretGun
+- Building_TurretRocket
+- Building_Vent
+- Building_WorkTable
+- Building_WorkTable_HeatPush
+- Hive
+- Mineable
+Plant:
+- Plant
+- DeadPlant
+Pawn:
+- Pawn
+Filth:
+- Filth
+- LiquidFuel
+Attachment:
+- Fire

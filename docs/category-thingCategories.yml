@@ -1,0 +1,53 @@
+Item:
+- EggsFertilized
+- Drugs
+- BodyPartsBionic
+- EggsUnfertilized
+- Grenades
+- Artifacts
+- Manufactured
+- ApparelArmor
+- ApparelMisc
+- Wools
+- ApparelUtility
+- BodyPartsProsthetic
+- FoodMeals
+- BodyPartsArchotech
+- Headgear
+- Unfinished
+- AnimalProductRaw
+- PlantFoodRaw
+- ItemsMisc
+- WeaponsRanged
+- Medicine
+- BodyPartsNatural
+- Chunks
+- Foods
+- MortarShells
+- Leathers
+- WeaponsMelee
+- ApparelNoble
+- PlantMatter
+- Textiles
+- StoneBlocks
+- StoneChunks
+- ResourcesRaw
+- ArmorHeadgear
+Projectile:
+Building:
+- BuildingsPower
+- BuildingsSecurity
+- BuildingsSpecial
+- BuildingsTemperature
+- BuildingsArt
+- BuildingsJoy
+- BuildingsMisc
+- BuildingsFurniture
+- BuildingsProduction
+Plant:
+- Stumps
+- Plants
+Pawn:
+- Animals
+Filth:
+Attachment:
