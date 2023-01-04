@@ -31,7 +31,7 @@ class Workspace(object):
         data = xmltodict.parse(path.read_text('utf-8'), force_list=('ThingDef', 'li'))
 
         if data.get('Defs') and data['Defs'].get('ThingDef'):
-            logger.debug('digest file as thingdefs: %s' % path)
+            logger.trace('digest file as thingdefs: %s' % path)
             thingdefs = data['Defs']['ThingDef']
             for thingdef in thingdefs:
                 ### 移除不需要的元素
@@ -47,7 +47,7 @@ class Workspace(object):
                 if not '@Abstract' in thingdef:
                     self.defs[thingdef['defName']] = thingdef
         elif data.get('LanguageData'):
-            logger.debug('digest file as langdata: %s' % path)
+            logger.trace('digest file as langdata: %s' % path)
             self.langdata.update(data['LanguageData'])
         else:
             logger.warning('unknown file content, ignore: %s' % path)
@@ -122,7 +122,6 @@ class Workspace(object):
                         else:
                             child[k]['li'].extend(parent[k]['li'])
 
-        logger.info('cut inherit')
         for name, data in self.defs.items():
             if '@ParentName' not in data:
                 continue
@@ -145,7 +144,6 @@ class Workspace(object):
                 cut_inherit(mro[-index-2], mro[-index-1])
 
     def inject_langdata(self, ignore_extra=False):
-        logger.info('inject langdata')
         for k, v in self.langdata.items():
             name, part = k.split('.', 1)
             if part not in ('label', 'description'):
@@ -161,8 +159,6 @@ class Workspace(object):
             data[part] = v
 
     def clean(self):
-        logger.info('clean')
-
         for data in self.defs.values():
             data.pop('@Name', None)
             data.pop('@ParentName', None)
