@@ -34,7 +34,13 @@ class Workspace(object):
             logger.debug('digest file as thingdefs: %s' % path)
             thingdefs = data['Defs']['ThingDef']
             for thingdef in thingdefs:
-                # thingdef.pop('comps', None) # uncomment if to ignore comps
+                ### 移除不需要的元素
+                for i in (
+                    'comps', 'tools', 'verbs', 'inspectorTabs',
+                    'apparel', 'devNote'
+                ):
+                    thingdef.pop(i, None)
+                ###
                 if '@Name' in thingdef:
                     logger.trace('parent name load: [%s]' % thingdef['@Name'])
                     self._refs[thingdef['@Name']] = thingdef
@@ -164,6 +170,7 @@ class Workspace(object):
             for k, v in data.items():
                 if isinstance(v, dict) and v.get('li'):
                     data[k] = v['li']
+                
 
     def dump(self, path, indent=0):
         if isinstance(path, str):
