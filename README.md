@@ -27,4 +27,9 @@ w.digest_dir(defpath / 'HediffDefs' / 'BodyParts')
 
 langpath = root / 'Languages'
 w.digest_dir(langpath / 'ChineseSimplified (简体中文)' / 'DefInjected' / 'ThingDef')
+
+w.solve_inherit()
+w.inject_langdata(ignore_extra=True)
+w.clean()
+w.dump('dump.json', indent=4)
 ```
