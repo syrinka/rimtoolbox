@@ -104,8 +104,8 @@ class Workspace(object):
                 elif k not in child:
                     # 该 key 在子类未定义，遂覆盖之
                     child[k] = v
-                elif isinstance(child[k], dict):
-                    if child[k].get('@Inherit', '').lower() == 'false':
+                elif isinstance(child[k], dict) \
+                and child[k].get('@Inherit', '').lower() == 'false':
                         # 该 key 有不继承标注，移除该标注，若移除标注后 key 内无内容，则将该 key 也移除
                         # Note:
                         #   有时子类会给父类并没有的 key 打上不继承标注
@@ -115,12 +115,18 @@ class Workspace(object):
                         if not child[k].keys():
                             child.pop(k)
 
-                    elif child[k].get('li') and parent[k].get('li'):
+                elif isinstance(child[k], dict) and isinstance(parent[k], dict):
+                    if child[k].get('li') and parent[k].get('li'):
                         # 该 key 指向一个列表，尝试合并
                         if k == 'comp':
                             merge_comp(child[k]['li'], parent[k]['li'])
                         else:
                             child[k]['li'].extend(parent[k]['li'])
+
+                    else:
+                        for k1, v1 in parent[k].items():
+                            if k1 not in child[k]:
+                                child[k][k1] = v1
 
         for name, data in self.defs.items():
             if '@ParentName' not in data:
