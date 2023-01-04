@@ -1,11 +1,10 @@
-## 所有 thingdef 确定拥有的属性
+> 尚未整理完全，仅供参考
+
+## 所有 thingdef 都必定拥有的属性
 
 - defName
 - label
 - category
-- tickerType
-- altitudeLayer
-- useHitPoints
 - thingClass
 
 ### category
@@ -21,3 +20,7 @@
 - Mote
 - Ethereal
 -->
+
+### thingClass
+
+see `category-thingClass.yml`

@@ -9,7 +9,7 @@ Item:
 - ThingWithComps
 - UnfinishedThing
 Projectile:
-- Bullet',
+- Bullet
 - Projectile_DoomsdayRocket
 - Projectile_Explosive
 - Projectile_Liquid
