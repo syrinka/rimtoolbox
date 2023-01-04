@@ -1,13 +1,12 @@
 import json
 import re
-from typing import Optional, Union, Dict, List
+from typing import Optional as opt, Union, Dict, List, Callable
 from pathlib import Path
 from collections import OrderedDict
 
 import xmltodict
 
 from . import log
-from .schemas.base import ThingDefsMixin
 
 __all__ = ['Workspace']
 
@@ -47,7 +46,10 @@ class Workspace(object):
         else:
             logger.warning('unknown file content, ignore: %s' % path)
 
-    def digest_dir(self, path: Union[str, Path], depth=-1):
+    def digest_dir(self, path: Union[str, Path],
+        depth: int = -1,
+        filter: opt[Callable[[Path], bool]] = None
+    ):
         if isinstance(path, str):
             path = Path(path)
 
@@ -55,7 +57,8 @@ class Workspace(object):
 
         for path in path.iterdir():
             if path.is_file() and path.suffix == '.xml':
-                self.digest(path)
+                if filter is None or filter(path):
+                    self.digest(path)
             elif path.is_dir():
                 if depth > 0:
                     self.digest_dir(path, depth-1)
