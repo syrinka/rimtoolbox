@@ -37,7 +37,7 @@ class Workspace(object):
         data = xmltodict.parse(path.read_text('utf-8'), force_list=all_deftype+('li',))
 
         if data.get('Defs'):
-            logger.trace('digest file as thingdefs: %s' % path)
+            logger.trace('digest file as def file: %s' % path)
             for key in data['Defs']:
                 if key in all_deftype:
                     deftype = key
