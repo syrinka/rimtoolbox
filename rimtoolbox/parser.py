@@ -10,7 +10,7 @@ from . import log
 
 __all__ = ['Workspace']
 
-all_defs = (
+all_deftype = (
     'ThingDef',
     'TerrainDef',
     'TraitDef'
@@ -34,29 +34,33 @@ class Workspace(object):
         assert path.is_file(), 'Digest path %s not file' % path
         assert path.suffix == '.xml', 'Digest file must be xml file'
 
-        data = xmltodict.parse(path.read_text('utf-8'), force_list=all_defs+('li',))
+        data = xmltodict.parse(path.read_text('utf-8'), force_list=all_deftype+('li',))
 
-        if data.get('Defs') and data['Defs'].get('ThingDef'):
+        if 'Defs' in data:
             logger.trace('digest file as thingdefs: %s' % path)
+            for key in data['Defs']:
+                if key in all_deftype:
+                    deftype = key
+                else:
+                    continue
 
-            deftype = 'ThingDef'
-            defxmls = data['Defs'][deftype]
-            for defxml in defxmls:
-                defxml['@DefType'] = deftype # record
+                defxmls = data['Defs'][deftype]
+                for defxml in defxmls:
+                    defxml['@DefType'] = deftype # record
 
-                ### 移除不需要的元素
-                for i in (
-                    'comps', 'tools', 'verbs', 'inspectorTabs',
-                    'apparel', 'devNote'
-                ):
-                    defxml.pop(i, None)
-                ###
+                    ### 移除不需要的元素
+                    for i in (
+                        'comps', 'tools', 'verbs', 'inspectorTabs',
+                        'apparel', 'devNote'
+                    ):
+                        defxml.pop(i, None)
+                    ###
 
-                if '@Name' in defxml:
-                    logger.trace('parent name load: [%s]' % defxml['@Name'])
-                    self._refs[defxml['@Name']] = defxml
-                if not '@Abstract' in defxml:
-                    self.defs[defxml['defName']] = defxml
+                    if '@Name' in defxml:
+                        logger.trace('parent name load: [%s]' % defxml['@Name'])
+                        self._refs[defxml['@Name']] = defxml
+                    if not '@Abstract' in defxml:
+                        self.defs[defxml['defName']] = defxml
 
         elif data.get('LanguageData'):
             logger.trace('digest file as langdata: %s' % path)
