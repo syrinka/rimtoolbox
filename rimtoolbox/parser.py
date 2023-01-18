@@ -10,6 +10,12 @@ from . import log
 
 __all__ = ['Workspace']
 
+all_defs = (
+    'ThingDef',
+    'TerrainDef',
+    'TraitDef'
+)
+
 
 class Workspace(object):
     defs: Dict[str, Dict]
@@ -28,12 +34,16 @@ class Workspace(object):
         assert path.is_file(), 'Digest path %s not file' % path
         assert path.suffix == '.xml', 'Digest file must be xml file'
 
-        data = xmltodict.parse(path.read_text('utf-8'), force_list=('ThingDef', 'li'))
+        data = xmltodict.parse(path.read_text('utf-8'), force_list=all_defs+('li',))
 
         if data.get('Defs') and data['Defs'].get('ThingDef'):
             logger.trace('digest file as thingdefs: %s' % path)
-            thingdefs = data['Defs']['ThingDef']
+
+            deftype = 'ThingDef'
+            thingdefs = data['Defs'][deftype]
             for thingdef in thingdefs:
+                thingdef['@DefType'] = deftype
+
                 ### 移除不需要的元素
                 for i in (
                     'comps', 'tools', 'verbs', 'inspectorTabs',
@@ -41,14 +51,17 @@ class Workspace(object):
                 ):
                     thingdef.pop(i, None)
                 ###
+
                 if '@Name' in thingdef:
                     logger.trace('parent name load: [%s]' % thingdef['@Name'])
                     self._refs[thingdef['@Name']] = thingdef
                 if not '@Abstract' in thingdef:
                     self.defs[thingdef['defName']] = thingdef
+
         elif data.get('LanguageData'):
             logger.trace('digest file as langdata: %s' % path)
             self.langdata.update(data['LanguageData'])
+
         else:
             logger.warning('unknown file content, ignore: %s' % path)
 
@@ -98,7 +111,7 @@ class Workspace(object):
                 % (child.get('defName') or child['@Name'], parent['@Name']))
 
             for k, v in parent.items():
-                if k in ('@Abstract', '@Name', '@ParentName'):
+                if k in ('@Abstract', '@Name', '@ParentName', '@DefType'):
                     # 特殊 key 不予覆盖
                     pass
                 elif k not in child:
