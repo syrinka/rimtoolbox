@@ -8,9 +8,9 @@ if __name__ == '__main__':
     data = json.load(open(sys.argv[1]))
     print('en,zh')
     for k, v in data.items():
-        if 'label' in v and 'label-T' in v:
+        if 'label' in v and 'label-zh' in v:
             if v['label'] in dup:
                 continue
             else:
-                print(f'{v["label-T"]},{v["label"]}')
+                print(f'{v["label"]},{v["label-zh"]}')
                 dup.add(v['label'])

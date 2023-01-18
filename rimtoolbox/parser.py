@@ -11,9 +11,13 @@ from . import log
 __all__ = ['Workspace']
 
 all_deftype = (
-    'ThingDef',
-    'TerrainDef',
-    'TraitDef'
+    'ThingDef', # 物体  
+    'TerrainDef', # 地形
+    'FeatureDef', # 地貌
+    'TraitDef', # 特质
+    'StatDef', # 属性
+    'HediffDef', # 健康状态
+    'PawnKindDef' # 背景故事
 )
 
 
@@ -167,7 +171,7 @@ class Workspace(object):
             for index in range(len(mro)-1):
                 cut_inherit(mro[-index-2], mro[-index-1])
 
-    def inject_langdata(self, *, mark='T', ignore_extra=False):
+    def inject_langdata(self, *, mark='', ignore_extra=False):
         for key, trans in self.langdata.items():
             defname, part = key.split('.', 1)
             if part not in ('label', 'description'):
@@ -181,7 +185,7 @@ class Workspace(object):
                     logger.warning('dangling langdata for [%s]' % key)
                 continue
 
-            defxml[part + '-' + mark] = trans
+            defxml[part + mark] = trans
 
     def clean(self):
         for defxml in self.defs.values():
