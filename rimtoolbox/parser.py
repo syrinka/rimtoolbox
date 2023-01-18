@@ -166,7 +166,7 @@ class Workspace(object):
             for index in range(len(mro)-1):
                 cut_inherit(mro[-index-2], mro[-index-1])
 
-    def inject_langdata(self, ignore_extra=False):
+    def inject_langdata(self, *, mark='T', ignore_extra=False):
         for key, trans in self.langdata.items():
             defname, part = key.split('.', 1)
             if part not in ('label', 'description'):
@@ -180,7 +180,7 @@ class Workspace(object):
                     logger.warning('dangling langdata for [%s]' % key)
                 continue
 
-            defxml[part] = trans
+            defxml[part + '-' + mark] = trans
 
     def clean(self):
         for defxml in self.defs.values():
