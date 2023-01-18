@@ -40,23 +40,23 @@ class Workspace(object):
             logger.trace('digest file as thingdefs: %s' % path)
 
             deftype = 'ThingDef'
-            thingdefs = data['Defs'][deftype]
-            for thingdef in thingdefs:
-                thingdef['@DefType'] = deftype
+            defxmls = data['Defs'][deftype]
+            for defxml in defxmls:
+                defxml['@DefType'] = deftype # record
 
                 ### 移除不需要的元素
                 for i in (
                     'comps', 'tools', 'verbs', 'inspectorTabs',
                     'apparel', 'devNote'
                 ):
-                    thingdef.pop(i, None)
+                    defxml.pop(i, None)
                 ###
 
-                if '@Name' in thingdef:
-                    logger.trace('parent name load: [%s]' % thingdef['@Name'])
-                    self._refs[thingdef['@Name']] = thingdef
-                if not '@Abstract' in thingdef:
-                    self.defs[thingdef['defName']] = thingdef
+                if '@Name' in defxml:
+                    logger.trace('parent name load: [%s]' % defxml['@Name'])
+                    self._refs[defxml['@Name']] = defxml
+                if not '@Abstract' in defxml:
+                    self.defs[defxml['defName']] = defxml
 
         elif data.get('LanguageData'):
             logger.trace('digest file as langdata: %s' % path)
@@ -102,7 +102,7 @@ class Workspace(object):
             li.extend(to_extend)
 
         def cut_inherit(child, parent):
-            # 解耦两个 thingdef 间的继承关系
+            # 解耦两个 defxml 间的继承关系
             assert child['@ParentName'] == parent['@Name']
             assert not parent.get('@ParentName')
             child.pop('@ParentName')
