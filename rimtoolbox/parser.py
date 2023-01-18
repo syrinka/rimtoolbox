@@ -145,11 +145,11 @@ class Workspace(object):
                             if k1 not in child[k]:
                                 child[k][k1] = v1
 
-        for name, data in self.defs.items():
-            if '@ParentName' not in data:
+        for defxml in self.defs.values():
+            if '@ParentName' not in defxml:
                 continue
 
-            mro = [data] # inherit link: child <---> parent
+            mro = [defxml] # inherit link: child <---> parent
             while True:
                 parent_name = mro[-1].get('@ParentName')
                 if parent_name is None:
@@ -167,28 +167,29 @@ class Workspace(object):
                 cut_inherit(mro[-index-2], mro[-index-1])
 
     def inject_langdata(self, ignore_extra=False):
-        for k, v in self.langdata.items():
-            name, part = k.split('.', 1)
+        for key, trans in self.langdata.items():
+            defname, part = key.split('.', 1)
             if part not in ('label', 'description'):
                 continue
 
-            logger.trace('langdata %s' % k)
+            logger.trace('langdata %s' % key)
             try:
-                data = self.defs[name]
+                defxml = self.defs[defname]
             except KeyError:
                 if not ignore_extra:
-                    logger.warning('dangling langdata for [%s]' % name)
+                    logger.warning('dangling langdata for [%s]' % key)
                 continue
-            data[part] = v
+
+            defxml[part] = trans
 
     def clean(self):
-        for data in self.defs.values():
-            data.pop('@Name', None)
-            data.pop('@ParentName', None)
+        for defxml in self.defs.values():
+            defxml.pop('@Name', None)
+            defxml.pop('@ParentName', None)
             # 将 <li> 转换成正常的列表
-            for k, v in data.items():
+            for k, v in defxml.items():
                 if isinstance(v, dict) and v.get('li'):
-                    data[k] = v['li']
+                    defxml[k] = v['li']
                 
 
     def dump(self, path, indent=0):
