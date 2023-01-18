@@ -21,6 +21,7 @@ class Workspace(object):
     defs: Dict[str, Dict]
     _refs: Dict[str, Dict]
     langdata: Dict[str, str]
+    version: opt[str] = None
 
     def __init__(self):
         self.defs = {}
