@@ -1,5 +1,5 @@
 **/__pycache__/
-*.log
-*.json
-*.csv
+dump/**
 test_*
+*.log
+.env
