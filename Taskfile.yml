@@ -12,13 +12,9 @@ tasks:
 
   precheck:
     internal: true
-    silent: true
     run: once
     cmds:
-    - |
-      if [[ -z $VIRTUAL_ENV ]]; then
-        exit 1
-      fi
+    - '[[ -z $VIRTUAL_ENV ]] && exit 1 || echo precheck pass'
 
   trans-def:
     cmds:
@@ -43,6 +39,7 @@ tasks:
 
   default:
     cmds:
+    - task: precheck
     - echo $RIM_DATA_PATH
     - echo $RIM_TRANS_PATH
     - task: clean
