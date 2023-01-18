@@ -10,4 +10,4 @@ if __name__ == '__main__':
             continue
         data = xmltodict.parse(path.read_text('utf-8'))
         for k, v in data['LanguageData'].items():
-            print(','.join([path.name.split('.')[0], k, v]))
+            print(','.join([path.name.split('.')[0], k, v or '']))
