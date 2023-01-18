@@ -1,0 +1,51 @@
+version: '3'
+
+dotenv:
+- .env
+- .env.dist
+
+tasks:
+  clean:
+    internal: true
+    cmds:
+    - rm -r dump && mkdir dump
+
+  precheck:
+    internal: true
+    silent: true
+    run: once
+    cmds:
+    - |
+      if [[ -z $VIRTUAL_ENV ]]; then
+        exit 1
+      fi
+
+  trans-def:
+    cmds:
+    - python bin/trans.py dump/data.json trans.csv > dump/trans-def.csv
+
+  trans-key:
+    cmds:
+    - task: precheck
+    - python bin/keys.py "$RIM_TRANS_PATH/Keyed" > dump/trans-key.csv
+
+  extract:
+    desc: extract info from game data
+    summary: |
+      Extract all Def objects from game data, including:
+      * ThingDef
+      * TerrainDef
+      * TraitDef
+      * etc.
+    cmds:
+    - task: precheck
+    - python extract.py "$RIM_DATA_PATH" "$RIM_TRANS_PATH/Definjected" dump/data.json
+
+  default:
+    cmds:
+    - echo $RIM_DATA_PATH
+    - echo $RIM_TRANS_PATH
+    - task: clean
+    - task: extract
+    - task: trans-def
+    - task: trans-key
