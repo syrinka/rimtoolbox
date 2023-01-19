@@ -95,21 +95,21 @@ class Workspace(object):
                     self.digest_dir(path, -1)
 
     def solve_inherit(self):
-        def merge_comp(li, base):
+        def merge_comp(x, y):
             # 合并两个 comp 列表：
-            # 若两个元素有相同的 compClass 键，则使用 li 中的元素
+            # 若两个元素有相同的 compClass 键，则使用 x 中的元素
             to_extend = []
-            for item in li:
-                if isinstance(item, dict) and 'compClass' in item:
-                    for i in li:
-                        if i.get('compClass') == item['compClass']:
-                            logger.warning('collide')
+            for yitem in y:
+                if isinstance(yitem, dict) and '@compClass' in yitem:
+                    for xitem in x:
+                        if isinstance(xitem, dict) \
+                        and xitem.get('@compClass') == yitem['@compClass']:
                             break
                     else:
-                        to_extend.append(item)
+                        to_extend.append(yitem)
                 else:
-                    to_extend.append(item)
-            li.extend(to_extend)
+                    to_extend.append(yitem)
+            x.extend(to_extend)
 
         def cut_inherit(child, parent):
             # 解耦两个 defxml 间的继承关系
@@ -188,7 +188,6 @@ class Workspace(object):
         # 没几层嵌套，可以直接递归
         if isinstance(data, dict):
             for k, v in data.items():
-                print(k)
                 if isinstance(v, dict) and 'li' in v:
                     data[k] = v['li']
                     self.fix(data[k])
