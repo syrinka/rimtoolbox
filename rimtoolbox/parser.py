@@ -61,6 +61,7 @@ class Workspace(object):
                 for defxml in defxmls:
                     defxml['@DefType'] = deftype # record
                     self.strip(defxml)
+                    self.fix(defxml)
                     if '@Name' in defxml:
                         logger.trace('parent name load: [%s]' % defxml['@Name'])
                         self._refs[defxml['@Name']] = defxml
@@ -138,17 +139,12 @@ class Workspace(object):
                             child.pop(k)
 
                 elif isinstance(child[k], dict) and isinstance(parent[k], dict):
-                    if child[k].get('li') and parent[k].get('li'):
-                        # 该 key 指向一个列表，尝试合并
-                        if k == 'comp':
-                            merge_comp(child[k]['li'], parent[k]['li'])
-                        else:
-                            child[k]['li'].extend(parent[k]['li'])
+                    for k1, v1 in parent[k].items():
+                        if k1 not in child[k]:
+                            child[k][k1] = v1
 
-                    else:
-                        for k1, v1 in parent[k].items():
-                            if k1 not in child[k]:
-                                child[k][k1] = v1
+                elif isinstance(child[k], list) and isinstance(parent[k], list):
+                    merge_comp(child[k], parent[k])
 
         for defxml in self.defs.values():
             if '@ParentName' not in defxml:
@@ -187,15 +183,25 @@ class Workspace(object):
 
             defxml[part + mark] = trans
 
+    def fix(self, data):
+        # 将 <li> 转换成正常的列表
+        # 没几层嵌套，可以直接递归
+        if isinstance(data, dict):
+            for k, v in data.items():
+                print(k)
+                if isinstance(v, dict) and 'li' in v:
+                    data[k] = v['li']
+                    self.fix(data[k])
+                else:
+                    self.fix(v)
+        elif isinstance(data, list):
+            for i, v in enumerate(data):
+                self.fix(v)
+
     def clean(self):
         for defxml in self.defs.values():
             defxml.pop('@Name', None)
             defxml.pop('@ParentName', None)
-            # 将 <li> 转换成正常的列表
-            for k, v in defxml.items():
-                if isinstance(v, dict) and v.get('li'):
-                    defxml[k] = v['li']
-                
 
     def dump(self, path, indent=0):
         if isinstance(path, str):
