@@ -32,6 +32,14 @@ class Workspace(object):
         self._refs = {}
         self.langdata = {}
 
+    def strip(self, defxml):
+        # 移除对 wiki 无用的属性
+        for i in (
+            'comps', 'tools', 'verbs', 'inspectorTabs',
+            'apparel', 'devNote'
+        ):
+            defxml.pop(i, None)
+
     def digest(self, path: Union[str, Path]):
         if isinstance(path, str):
             path = Path(path)
@@ -52,15 +60,7 @@ class Workspace(object):
                 defxmls = data['Defs'][deftype]
                 for defxml in defxmls:
                     defxml['@DefType'] = deftype # record
-
-                    ### 移除不需要的元素
-                    for i in (
-                        'comps', 'tools', 'verbs', 'inspectorTabs',
-                        'apparel', 'devNote'
-                    ):
-                        defxml.pop(i, None)
-                    ###
-
+                    self.strip(defxml)
                     if '@Name' in defxml:
                         logger.trace('parent name load: [%s]' % defxml['@Name'])
                         self._refs[defxml['@Name']] = defxml
