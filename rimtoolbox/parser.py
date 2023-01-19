@@ -202,9 +202,18 @@ class Workspace(object):
             defxml.pop('@Name', None)
             defxml.pop('@ParentName', None)
 
-    def dump(self, path, indent=0):
+    def dumps(self, defs=None, indent=4):
+        if defs is None:
+            return json.dumps(self.defs, indent=indent, ensure_ascii=False)
+        else:
+            data = {}
+            for k, v in self.defs.items():
+                if v['@DefType'] in defs:
+                    data[k] = v
+            return json.dumps(self.defs, indent=indent, ensure_ascii=False)
+
+    def dump(self, path, *args, **kw):
         if isinstance(path, str):
             path = Path(path)
 
-        text = json.dumps(self.defs, indent=indent, ensure_ascii=False)
-        path.write_text(text)
+        path.write_text(self.dumps(*args, **kw), encoding='utf-8')
