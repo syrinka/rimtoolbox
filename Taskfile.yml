@@ -18,12 +18,23 @@ tasks:
 
   trans-def:
     cmds:
-    - python bin/trans.py dump/data.json trans.csv > dump/trans-def.csv
+    - python bin/trans.py dump/thingdef.json > dump/thingdef_T.csv
+    - python bin/trans.py dump/stats.json > dump/stats_T.csv
 
   trans-key:
     cmds:
     - task: precheck
     - python bin/keys.py "$RIM_TRANS_PATH/Keyed" > dump/trans-key.csv
+
+  split:
+    cmds:
+    - task: precheck
+    - python bin/split.py
+
+  stat:
+    cmds:
+    - task: precheck
+    - python bin/stat.py
 
   extract:
     desc: extract info from game data
@@ -45,4 +56,6 @@ tasks:
     - task: clean
     - task: extract
     - task: trans-def
-    - task: trans-key
+    - task: split
+    - task: stat
+    # - task: trans-key

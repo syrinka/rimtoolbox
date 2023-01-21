@@ -12,12 +12,13 @@ __all__ = ['Workspace']
 
 all_deftype = (
     'ThingDef', # 物体  
-    'TerrainDef', # 地形
-    'FeatureDef', # 地貌
-    'TraitDef', # 特质
     'StatDef', # 属性
-    'HediffDef', # 健康状态
-    'PawnKindDef' # 背景故事
+    'StatCategoryDef'
+    # 'TerrainDef', # 地形
+    # 'FeatureDef', # 地貌
+    # 'TraitDef', # 特质
+    # 'HediffDef', # 健康状态
+    # 'PawnKindDef' # 背景故事
 )
 
 
@@ -35,7 +36,7 @@ class Workspace(object):
     def strip(self, defxml):
         # 移除对 wiki 无用的属性
         for i in (
-            'comps', 'tools', 'verbs', 'inspectorTabs',
+            'tools', 'inspectorTabs',
             'apparel', 'devNote'
         ):
             defxml.pop(i, None)
@@ -107,7 +108,7 @@ class Workspace(object):
                             break
                     else:
                         to_extend.append(yitem)
-                else:
+                elif yitem not in x:
                     to_extend.append(yitem)
             x.extend(to_extend)
 
@@ -210,7 +211,7 @@ class Workspace(object):
             for k, v in self.defs.items():
                 if v['@DefType'] in defs:
                     data[k] = v
-            return json.dumps(self.defs, indent=indent, ensure_ascii=False)
+            return json.dumps(data, indent=indent, ensure_ascii=False)
 
     def dump(self, path, *args, **kw):
         if isinstance(path, str):
