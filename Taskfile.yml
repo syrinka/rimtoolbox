@@ -5,11 +5,6 @@ dotenv:
 - .env.dist
 
 tasks:
-  clean:
-    internal: true
-    cmds:
-    - rm -r dump && mkdir dump
-
   precheck:
     internal: true
     run: once
@@ -49,7 +44,6 @@ tasks:
     - task: precheck
     - echo $RIM_DATA_PATH
     - echo $RIM_TRANS_PATH
-    - task: clean
     - task: extract
     - task: trans-def
     - task: split
