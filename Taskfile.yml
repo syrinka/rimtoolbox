@@ -12,23 +12,27 @@ tasks:
     - '[[ -z $VIRTUAL_ENV ]] && exit 1 || echo precheck pass'
 
   trans-def:
+    deps: [extract]
     cmds:
     - task: precheck
     - python bin/trans.py dump/thingdef.json > dump/thingdef_T.csv
     - python bin/trans.py dump/stats.json > dump/stats_T.csv
 
   split:
+    deps: [extract]
     cmds:
     - task: precheck
     - python bin/split.py
 
   stat:
+    deps: [extract]
     cmds:
     - task: precheck
     - python bin/stat.py
 
   extract:
     desc: extract info from game data
+    run: once
     summary: |
       Extract all Def objects from game data, including:
       * ThingDef
