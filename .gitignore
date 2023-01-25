@@ -1,5 +1,6 @@
 **/__pycache__/
 dump/**
+!.gitkeep
 test_*
 *.log
 .env
