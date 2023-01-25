@@ -2,7 +2,7 @@ import json
 
 if __name__ == '__main__':
     stats = json.load(open('dump/stats.json', encoding='utf-8'))
-    cat = json.load(open('dump/statcat.json', encoding='utf-8'))
+    cat = json.load(open('dump/stat_categories.json', encoding='utf-8'))
     for k, v in stats.items():
         try:
             cat[v['category']].setdefault('children', []).append({

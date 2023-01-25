@@ -18,13 +18,9 @@ tasks:
 
   trans-def:
     cmds:
+    - task: precheck
     - python bin/trans.py dump/thingdef.json > dump/thingdef_T.csv
     - python bin/trans.py dump/stats.json > dump/stats_T.csv
-
-  trans-key:
-    cmds:
-    - task: precheck
-    - python bin/keys.py "$RIM_TRANS_PATH/Keyed" > dump/trans-key.csv
 
   split:
     cmds:

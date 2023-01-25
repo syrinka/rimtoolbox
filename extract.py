@@ -10,4 +10,4 @@ if __name__ == '__main__':
     w.clean()
     w.dump('dump/thingdef.json', ('ThingDef',))
     w.dump('dump/stats.json', ('StatDef',))
-    w.dump('dump/statcat.json', ('StatCategoryDef',))
+    w.dump('dump/stat_categories.json', ('StatCategoryDef',))
