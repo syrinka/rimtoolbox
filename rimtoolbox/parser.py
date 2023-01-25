@@ -24,13 +24,13 @@ all_deftype = (
 
 class Workspace(object):
     defs: Dict[str, Dict]
-    _refs: Dict[str, Dict]
+    refs: Dict[str, Dict]
     langdata: Dict[str, str]
     version: opt[str] = None
 
     def __init__(self):
         self.defs = {}
-        self._refs = {}
+        self.refs = {}
         self.langdata = {}
 
     def strip(self, defxml):
@@ -65,7 +65,7 @@ class Workspace(object):
                     self.fix(defxml)
                     if '@Name' in defxml:
                         logger.trace('parent name load: [%s]' % defxml['@Name'])
-                        self._refs[defxml['@Name']] = defxml
+                        self.refs[defxml['@Name']] = defxml
                     if not '@Abstract' in defxml:
                         self.defs[defxml['defName']] = defxml
 
@@ -158,7 +158,7 @@ class Workspace(object):
                     break
 
                 try:
-                    parent = self._refs[parent_name]
+                    parent = self.refs[parent_name]
                 except KeyError:
                     logger.warning('when solving inherit for [%s], parent [%s] is missing' % (name, parent_name))
                     break
