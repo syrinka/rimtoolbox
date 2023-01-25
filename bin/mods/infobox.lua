@@ -1,5 +1,26 @@
 local p = {}
 
+local function split(str, sep)
+    local str = tostring(str)
+    local sep = tostring(sep)
+    local p = 1
+    local targetArray = {}
+    if (sep == nil) then
+        return false
+    end
+    while (true) do
+        si, sd = string.find(str, sep, p, true)
+        if (si) then
+            table.insert(targetArray, string.sub(str,p,si - 1))
+            p = sd + 1
+        else
+            table.insert(targetArray, string.sub(str,p,string.len(str)))
+            break
+        end
+    end
+    return targetArray
+end
+
 local function html()
     return mw.html.create()
 end
