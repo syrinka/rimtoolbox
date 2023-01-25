@@ -1,26 +1,5 @@
 local p = {}
 
-local function split(str, sep)
-    local str = tostring(str)
-    local sep = tostring(sep)
-    local p = 1
-    local targetArray = {}
-    if (sep == nil) then
-        return false
-    end
-    while (true) do
-        si, sd = string.find(str, sep, p, true)
-        if (si) then
-            table.insert(targetArray, string.sub(str,p,si - 1))
-            p = sd + 1
-        else
-            table.insert(targetArray, string.sub(str,p,string.len(str)))
-            break
-        end
-    end
-    return targetArray
-end
-
 local function html()
     return mw.html.create()
 end
@@ -40,6 +19,26 @@ local function header(label, className)
         :done()
     :done()
 end
+
+local function description(value)
+    return html()
+    :tag('tr'):tag('td')
+        :attr('colspan', 2)
+        :css('text-align', 'center')
+        :tag('small')
+            :wikitext(value)
+        :done()
+    :done():done()
+end
+
+local function graphic(value)
+    return html()
+    :tag('tr'):tag('td')
+        :attr('colspan', 2)
+        :css('text-align', 'center')
+        :wikitext('[[File:'..value..'|250px]]')
+    :done():done()
+end 
 
 local function line(label, value)
     return html()
@@ -61,12 +60,6 @@ local function line(label, value)
     :done()
 end
 
-function a(href, label)
-    -- mw.html.wikitext does not originally support redirect syntax `[[]]`
-    -- this function replenish it
-    -- @TODO
-end
-
 function p.render(defName)
     local data = mw.huiji.db.findOne({
         ['_id'] = 'Data:ThingDef/'..defName..'.json',
@@ -77,29 +70,16 @@ function p.render(defName)
 
     local box = html():tag('table')
         :addClass('infobox')
-    	:css('width', '350px')
+        :css('width', '350px')
         :css('font-size', '14px')
 
     local tab = html()
     -- title
-    :node(header(data['label-zh'], 'infobox-title'))
+    :node(header(data['label'], 'infobox-title'))
     -- graphic
-    :tag('tr'):tag('td')
-        :attr('colspan', 2)
-        :css('text-align', 'center')
-        :tag('small')
-            :css('text-align', 'center')
-            -- :wikitext(data['description-zh'])
-        :done()
-    :done():done()
+    :node(graphic(defName))
     -- description
-    :tag('tr'):tag('td')
-        :attr('colspan', 2)
-        :css('text-align', 'center')
-        :tag('small')
-            :wikitext(data['description-zh'])
-        :done()
-    :done():done()
+    :node(description(data['description']))
     -- infos
     tab:node(header('基本信息'))
         -- seems like there's only one item in `thingCategories`
